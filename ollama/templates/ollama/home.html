@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Question</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
+        }
+         .container {
+            flex: 1;
+            overflow: hidden; /* Hide scrollbars on the container */
+            display: flex;
+            flex-direction: column;
+            margin-top:8px;
+        }
+        .box_answer {
+            flex: 1;
+            overflow-y: auto; /* Enable vertical scrolling for answers */
+            padding: 5px 25px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height:53vh;
+        }
+        .box_form {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height:48vh;
+        }
+        ._label {
+            margin-top: 10px;
+        }
+        ._text textarea {
+            width: 100%;
+            resize: vertical;
+        }
+        
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .box_form {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure it's on top of other elements */
+        }
+        .my_from{
+            position:relative;
+            margin:auto;
+            max-width:800px
+        }
+        .down{
+            position: absolute;
+            right: -45px;
+            top: 0;
+            background: transparent;
+            border: none;
+            color: #007bff;    
+        }
+    </style>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+            <div class="box_answer" id="boxAnswer">
+                <h4>Answers</h4>
+            </div>
+    </div>
+    <div class="box_form">
+        <div class="my_from">
+            <h4>Ask a Question</h4>
+            <button id="down" class="down">Down</button>
+            <form id="question-form" method="post" action="/">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_model">Model:</label>
+                    <select name="model" id="id_model" class="form-control">
+                        <option value="llama3.2:1b">llama3.2:1b</option>
+                        <option value="deepseek-r1:1.5b">deepseek-r1:1.5b</option>
+                        <option value="gemma:2b">gemma:2b</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_question">Question:</label>
+                    <textarea name="question" id="id_question" class="form-control" required cols="40" rows="3" maxlength="1000"></textarea>
+                </div>
+                <button type="submit" id="btn" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#question-form').submit(function(event) {
+                event.preventDefault();
+
+                var model = $('#id_model').val();
+                var question = $('#id_question').val();
+                
+               setTimeout(function() {
+                    $('#btn').text('Sending ...');
+                    $('#btn').prop('disabled', true);
+                    }, 0);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/',  // Replace with your URL name
+                    data: {
+                        'model': model,
+                        'question': question,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        var resultItem = "<div class='mb-3'>" +
+                            "<span><b>Model:</b> </span>" + data.model +
+                            "  <span><b>Generation Time:</b> </span>" + data.time_elapsed + "<br>" +
+                            "<span><b>Me:</b> </span>" + question + "<br>" +
+                            "<span><b>AI:</b></span><br>" +
+                            "<pre>" + data.answer + "</pre><hr></div>";
+                        $("#boxAnswer").append(resultItem); // Prepend the new answer
+                        $("#id_question").val('');
+                        $('#btn').text('Submit');
+                        $('#btn').prop('disabled', false);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX request failed", status, error);
+                        alert('Failed to send message.');
+                        $('#btn').text('Submit');
+                        $('#btn').prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
