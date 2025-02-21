@@ -73,7 +73,7 @@
         .down {
             position: absolute;
             right: -45px;
-            top: 0;
+            top: -4px;
             background: transparent;
             border: none;
             color: #007bff;
@@ -89,17 +89,20 @@
         #modelList {
             margin-bottom: 10px;
         }
-        #modelList span {
-            margin-right: 10px;
-            padding: 5px 10px;
+        .nameModel {
+            display: inline-block;
             border: 1px solid #ced4da;
             border-radius: 3px;
             background-color: #fff;
+            padding: 2px 5px;
+            margin-bottom: 4px;
+            margin-right: 6px;
         }
         #modelList span .deleteModel {
-            color: red;
-            cursor: pointer;
-            margin-left: 5px;
+                color: red;
+                cursor: pointer;
+                border: none;
+                margin-left: 5px;
         }
         /* Hidden by default */
         #modelManagementContainer {
@@ -163,9 +166,12 @@
                     <label for="id_question">Question:</label>
                     <textarea name="question" id="id_question" class="form-control" required cols="40" rows="3" maxlength="1000"></textarea>
                 </div>
-                <button type="submit" id="btn" class="btn btn-primary">Submit</button>
-                <!-- Add Model Management Button -->
-                <button type="button" id="manageModelsBtn" class="btn btn-secondary">Manage Models</button>
+                <div class="form-group d-flex justify-content-between">
+                    <!-- Add Model Management Button -->
+                    <button type="button" id="manageModelsBtn" class="btn btn-secondary">Manage Models</button>
+                    <button type="submit" id="btn" class="btn btn-primary">Send</button>
+
+                </div>
             </form>
         </div>
     </div>
@@ -173,6 +179,8 @@
     <!-- Model Management Container -->
     <div id="modelManagementContainer">
         <div id="modelManagement">
+            <!-- Close Button -->
+            <div class="d-flex justify-content-end"><i class="fas fa-close text-danger" id="closeModelManagement"></i></div>
             <h4>Manage AI Models</h4>
             <div id="modelList">
                 <!-- Models will be loaded here -->
@@ -183,8 +191,6 @@
                     <button class="btn btn-success" type="button" id="addModelBtn">Add Model</button>
                 </div>
             </div>
-            <!-- Close Button -->
-            <button type="button" class="btn btn-danger" id="closeModelManagement">Close</button>
         </div>
     </div>
 
@@ -202,8 +208,8 @@
                     success: function(data) {
                         var modelListHtml = '';
                         $.each(data.models, function(index, model) {
-                            modelListHtml += '<span data-model="' + model + '">' + model +
-                                             '<span class="deleteModel" data-model="' + model + '"> &times;</span></span>';
+                            modelListHtml += '<span class="nameModel" data-model="' + model + '">' + model +
+                                             '<span class="deleteModel" data-model="' + model + '">&times;</span></span>';
                         });
                         $('#modelList').html(modelListHtml);
                     },

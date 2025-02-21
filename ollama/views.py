@@ -42,14 +42,14 @@ def manage_models(request):
         elif action == 'delete':
             if model_name and model_name in models:
                 models.remove(model_name)
-        elif action == 'edit':
-            old_model_name = data.get('old_model_name')
-            if old_model_name and model_name:
-                try:
-                    index = models.index(old_model_name)
-                    models[index] = model_name
-                except ValueError:
-                    return JsonResponse({'status': 'error', 'message': 'Model not found'}, status=400)
+        # elif action == 'edit':
+        #     old_model_name = data.get('old_model_name')
+        #     if old_model_name and model_name:
+        #         try:
+        #             index = models.index(old_model_name)
+        #             models[index] = model_name
+        #         except ValueError:
+        #             return JsonResponse({'status': 'error', 'message': 'Model not found'}, status=400)
         else:
             return JsonResponse({'status': 'error', 'message': 'Invalid action'}, status=400)
 
