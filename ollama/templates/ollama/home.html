@@ -53,8 +53,11 @@
     <div id="modelTranslateContainer">
         <div id="modelTrans" class="container box_trans">
             <!-- Close Button -->
-            <div class="d-flex justify-content-end"><i class="fas fa-close text-danger" id="closeModeltrans"></i></div>
-            <h4>Translated</h4>
+            <div class="d-flex justify-content-between">
+                <i id="btnCopy" class="btn-copy fa fa-copy"></i>
+                <i class="fas fa-close text-danger" id="closeModeltrans"></i>
+            </div>
+            <h4>متن ترجمه شده</h4>
             <pre id="textTrans" class="text_trans">
             </pre>
         </div>
@@ -203,6 +206,18 @@
 
             });
 
+            $('#btnCopy').click(function(){
+            // گرفتن متن از تگ مورد نظر
+            var text = document.getElementById('textTrans').innerText;
+
+            // استفاده از Clipboard API برای کپی کردن متن
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('متن با موفقیت کپی شد!');
+            }, function(err) {
+                console.error('متاسفانه متن کپی نشد: ', err);
+            });
+        });
+
             $('#question-form').submit(function(event) {
                 event.preventDefault();
 
@@ -230,9 +245,13 @@
                             "  <span><b>Generation Time:</b> </span>" + data.time_elapsed + "<br>" +
                             "<span><b>Me:</b> </span>" + question + "<br>" +
                             "<span><b>AI:</b></span><br>" +
-                            "<div style='position: relative;'>" +
+                            "<div class='box-pre'>" +
+                            "<div class='d-flex justify-content-between'>"+
+                            '<i id="btnCopy" class="btn-copy fa fa-copy"></i>'+
+                            "<button class='translate-btn btn btn-success' data-target='" + uniqueId + "'>ترجمه فارسی</button>" +
+                            "</div>"
+                            +
                             "<pre id='" + uniqueId + "'>" + data.answer + "</pre>" +
-                            "<button class='translate-btn btn btn-success' data-target='" + uniqueId + "' style='position: absolute; top: 5px; right: 5px;'>ترجمه فارسی</button>" +
                             "</div>" 
                             +"<hr></div>";
                         $("#boxAnswer").append(resultItem);

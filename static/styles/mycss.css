@@ -1,3 +1,6 @@
+button, i {
+    cursor: pointer;
+}
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -37,10 +40,14 @@ body {
     width: 100%;
     resize: vertical;
 }
+.box-pre{
+    position: relative;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 4px;
+}
 pre {
-    background-color: #f0f0f0;
-    padding: 40px 10px 10px 10px;
-    border-radius: 5px;
+    padding: 10px;
     overflow-x: auto;
     white-space: pre-wrap; 
 }
@@ -133,6 +140,7 @@ pre {
 }
 #modelTrans h4{
     color:#fff;
+    text-align: right;
 }
 #modelTrans i{
     font-size:20px;
@@ -147,4 +155,8 @@ pre {
     text-align: justify;
     font-weight: bold;
     font-size:14px
+}
+.btn-copy{
+    color: #afb7c1;
+    margin: 2px;
 }
