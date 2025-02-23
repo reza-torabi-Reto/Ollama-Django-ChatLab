@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+}
+.box_answer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 5px 25px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-height: 56vh;
+    transition: max-height 0.3s ease; /* Smooth transition for height changes */
+}
+.box_form {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-height: 48vh;
+    transition: transform 0.3s ease; /* Smooth transition for position changes */
+}
+._label {
+    margin-top: 10px;
+}
+._text textarea {
+    width: 100%;
+    resize: vertical;
+}
+pre {
+    background-color: #f0f0f0;
+    padding: 40px 10px 10px 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    white-space: pre-wrap; 
+}
+.box_form {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.my_from {
+    position: relative;
+    margin: auto;
+    max-width: 800px;
+}
+.down {
+    position: absolute;
+    right: -45px;
+    top: -4px;
+    background: transparent;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+/* Style for the model management section */
+#modelManagement {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+#modelList {
+    margin-bottom: 10px;
+}
+.nameModel {
+    display: inline-block;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    background-color: #fff;
+    padding: 2px 5px;
+    margin-bottom: 4px;
+    margin-right: 6px;
+}
+#modelList span .deleteModel {
+        color: red;
+        cursor: pointer;
+        border: none;
+        margin-left: 5px;
+}
+/* Hidden by default */
+#modelManagementContainer, #modelTranslateContainer {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1001; /* Ensure it's on top of other elements */
+}
+#modelManagement {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 600px;
+}
+/* Style for the minimized state */
+.box_form.minimized {
+    transform: translateY(calc(100% - 40px)); /* Adjust 40px to the height of the button */
+}
+.box_answer.expanded {
+    max-height: calc(100vh - 60px); /* Adjust 60px to account for the button height */
+}
+#modelTranslateContainer{
+}
+#modelTrans{
+    height:98%;
+    padding:15px;
+    background-color: #292626;
+
+}
+#modelTrans h4{
+    color:#fff;
+}
+#modelTrans i{
+    font-size:20px;
+}
+.text_trans{
+    width: 100%;
+    margin: 10px auto;
+    min-height: 500px;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 8px 12px;
+    text-align: justify;
+    font-weight: bold;
+    font-size:14px
+}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,142 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask a Question</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}">
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> {% endcomment %}
     <!-- Font Awesome CSS for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Custom CSS -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .container {
-            flex: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            margin-top: 8px;
-        }
-        .box_answer {
-            flex: 1;
-            overflow-y: auto;
-            padding: 5px 25px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-height: 53vh;
-            transition: max-height 0.3s ease; /* Smooth transition for height changes */
-        }
-        .box_form {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-height: 48vh;
-            transition: transform 0.3s ease; /* Smooth transition for position changes */
-        }
-        ._label {
-            margin-top: 10px;
-        }
-        ._text textarea {
-            width: 100%;
-            resize: vertical;
-        }
-        pre {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-            white-space: pre-wrap; 
-        }
-        .box_form {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-        .my_from {
-            position: relative;
-            margin: auto;
-            max-width: 800px;
-        }
-        .down {
-            position: absolute;
-            right: -45px;
-            top: -4px;
-            background: transparent;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-        }
-        /* Style for the model management section */
-        #modelManagement {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #e9ecef;
-            border-radius: 5px;
-        }
-        #modelList {
-            margin-bottom: 10px;
-        }
-        .nameModel {
-            display: inline-block;
-            border: 1px solid #ced4da;
-            border-radius: 3px;
-            background-color: #fff;
-            padding: 2px 5px;
-            margin-bottom: 4px;
-            margin-right: 6px;
-        }
-        #modelList span .deleteModel {
-                color: red;
-                cursor: pointer;
-                border: none;
-                margin-left: 5px;
-        }
-        /* Hidden by default */
-        #modelManagementContainer {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            z-index: 1001; /* Ensure it's on top of other elements */
-        }
-        #modelManagement {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 80%;
-            max-width: 600px;
-        }
-        /* Style for the minimized state */
-        .box_form.minimized {
-            transform: translateY(calc(100% - 40px)); /* Adjust 40px to the height of the button */
-        }
-        .box_answer.expanded {
-            max-height: calc(100vh - 60px); /* Adjust 60px to account for the button height */
-        }
-        
-    </style>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'styles/mycss.css' %}">
 </head>
 <body>
     <div class="container">
@@ -168,13 +39,24 @@
                     <label for="id_question">Question:</label>
                     <textarea name="question" id="id_question" class="form-control" required cols="40" rows="3" maxlength="1000"></textarea>
                 </div>
-                <div class="form-group d-flex justify-content-between">
+                <div class="form-group d-flex justify-content-between mt-2">
                     <!-- Add Model Management Button -->
                     <button type="button" id="manageModelsBtn" class="btn btn-secondary">Manage Models</button>
                     <button type="submit" id="btn" class="btn btn-primary">Send</button>
 
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Model Translate Container -->
+    <div id="modelTranslateContainer">
+        <div id="modelTrans" class="container box_trans">
+            <!-- Close Button -->
+            <div class="d-flex justify-content-end"><i class="fas fa-close text-danger" id="closeModeltrans"></i></div>
+            <h4>Translated</h4>
+            <pre id="textTrans" class="text_trans">
+            </pre>
         </div>
     </div>
 
@@ -196,7 +78,12 @@
             </div>
         </div>
     </div>
-
+    <!-- Bootstrap JS -->
+    {% comment %} <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> {% endcomment %}
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- jQuery -->
+    {% comment %} <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> {% endcomment %}
+    <script src="{% static 'js/myjs.js' %}"></script>
     <script>
         $(document).ready(function() {
             // Load models on page load
@@ -286,9 +173,8 @@
                 var targetId = $(this).data('target');
                 var preElement = $('#' + targetId);
                 var textToTranslate = preElement.text();
+                var transElement = $("#textTrans");
                 var button = $(this);
-
-                button.text('Translating...');
                 button.prop('disabled', true);
 
                 $.ajax({
@@ -300,9 +186,9 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        preElement.html(data.translation); // جایگزین کردن متن با ترجمه
-                        preElement.css('direction', 'rtl'); // راست‌چین کردن متن
-                        button.text('Translated');
+                        transElement.html(data.translation); // جایگزین کردن متن با ترجمه
+                        
+                        transElement.css('direction', 'rtl'); // راست‌چین کردن متن
                     },
                     error: function(xhr, status, error) {
                         console.error("Translation failed", status, error);
@@ -313,6 +199,8 @@
                         button.prop('disabled', false);
                     }
                 });
+                $('#modelTranslateContainer').show();
+
             });
 
             $('#question-form').submit(function(event) {
@@ -344,7 +232,7 @@
                             "<span><b>AI:</b></span><br>" +
                             "<div style='position: relative;'>" +
                             "<pre id='" + uniqueId + "'>" + data.answer + "</pre>" +
-                            "<button class='translate-btn' data-target='" + uniqueId + "' style='position: absolute; top: 5px; right: 5px;'>Translate</button>" +
+                            "<button class='translate-btn btn btn-success' data-target='" + uniqueId + "' style='position: absolute; top: 5px; right: 5px;'>ترجمه فارسی</button>" +
                             "</div>" 
                             +"<hr></div>";
                         $("#boxAnswer").append(resultItem);
@@ -369,6 +257,21 @@
             // Hide Model Management Container
             $('#closeModelManagement').click(function() {
                 $('#modelManagementContainer').hide();
+            });
+
+            // Show Model Management Container
+            $('#manageModelsBtn').click(function() {
+                $('#modelManagementContainer').show();
+            });
+
+            // Hide Model Management Container
+            $('#closeModelManagement').click(function() {
+                $('#modelManagementContainer').hide();
+            });
+
+            // Hide Model Management Container
+            $('#closeModeltrans').click(function() {
+                $('#modelTranslateContainer').hide();
             });
 
             // Minimize/Maximize box_form
