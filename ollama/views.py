@@ -6,6 +6,8 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .forms import QuestionForm
 from .MyAI import gernerate_ai
+from googletrans import Translator  # یا هر کتابخانه ترجمه دیگری
+
 
 def get_models_from_json():
     json_file_path = os.path.join(settings.BASE_DIR, 'static', 'data', 'models_ai.json')
@@ -21,6 +23,38 @@ def write_models_to_json(models):
     json_file_path = os.path.join(settings.BASE_DIR, 'static', 'data', 'models_ai.json')
     with open(json_file_path, 'w') as f:
         json.dump(models, f, indent=4)
+
+
+# @csrf_exempt
+def translate_view(request):
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        try:
+            translator = Translator()
+            translation = translator.translate(text, dest='fa').text
+            return JsonResponse({'translation': translation})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def ollama_view(request):
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':        
+        form = QuestionForm(request.POST)
+        print("OKKKK")
+
+        if form.is_valid():
+            model = form.cleaned_data['model']
+            question = form.cleaned_data['question']
+            _result, time_elapsed = gernerate_ai(model, question)
+            return JsonResponse({'model': _result['model'], 'answer': _result['answer'], 'me':question, "time_elapsed": time_elapsed})
+        else:
+            return JsonResponse({'error': form.errors}, status=400)
+    else:
+        form = QuestionForm()
+        return render(request, 'ollama/home.html', {'form': form})
+    
 
 
 @csrf_exempt  # برای غیرفعال کردن CSRF protection برای این view (فقط برای نمونه کد)
@@ -42,36 +76,8 @@ def manage_models(request):
         elif action == 'delete':
             if model_name and model_name in models:
                 models.remove(model_name)
-        # elif action == 'edit':
-        #     old_model_name = data.get('old_model_name')
-        #     if old_model_name and model_name:
-        #         try:
-        #             index = models.index(old_model_name)
-        #             models[index] = model_name
-        #         except ValueError:
-        #             return JsonResponse({'status': 'error', 'message': 'Model not found'}, status=400)
         else:
             return JsonResponse({'status': 'error', 'message': 'Invalid action'}, status=400)
 
         write_models_to_json(models)
         return JsonResponse({'status': 'success', 'models': models})
-
-
-
-
-#--------
-def ollama_view(request):
-    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':        
-        form = QuestionForm(request.POST)
-        print("OKKKK")
-
-        if form.is_valid():
-            model = form.cleaned_data['model']
-            question = form.cleaned_data['question']
-            _result, time_elapsed = gernerate_ai(model, question)
-            return JsonResponse({'model': _result['model'], 'answer': _result['answer'], 'me':question, "time_elapsed": time_elapsed})
-        else:
-            return JsonResponse({'error': form.errors}, status=400)
-    else:
-        form = QuestionForm()
-        return render(request, 'ollama/home.html', {'form': form})
