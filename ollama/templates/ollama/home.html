@@ -54,7 +54,7 @@
         <div id="modelTrans" class="container box_trans">
             <!-- Close Button -->
             <div class="d-flex justify-content-between">
-                <i id="btnCopy" class="btn-copy fa fa-copy"></i>
+                <i id="btnTransCopy" class="btn-trans-copy fa fa-copy"></i>
                 <i class="fas fa-close text-danger" id="closeModeltrans"></i>
             </div>
             <h4>متن ترجمه شده</h4>
@@ -171,6 +171,7 @@
                     }));
                 });
             }
+
             // Translate button click event
             $(document).on('click', '.translate-btn', function() {
                 var targetId = $(this).data('target');
@@ -205,18 +206,36 @@
                 $('#modelTranslateContainer').show();
 
             });
-
-            $('#btnCopy').click(function(){
+            
+        $('#btnTransCopy').click(function(){
             // گرفتن متن از تگ مورد نظر
             var text = document.getElementById('textTrans').innerText;
 
             // استفاده از Clipboard API برای کپی کردن متن
             navigator.clipboard.writeText(text).then(function() {
-                console.log('متن با موفقیت کپی شد!');
+                console.log('متن ترجمه با موفقیت کپی شد!');
             }, function(err) {
-                console.error('متاسفانه متن کپی نشد: ', err);
+                console.error('متاسفانه متن ترجمه کپی نشد: ', err);
             });
+
+            
         });
+
+
+            $(document).on('click', '.btn-copy', function() {
+                var targetId = $(this).data('target');
+                var copyElement = $('#' + targetId);
+                // گرفتن متن از تگ مورد نظر
+                var text = copyElement.text();
+
+                // استفاده از Clipboard API برای کپی کردن متن
+                navigator.clipboard.writeText(text).then(function() {
+                    console.log('متن با موفقیت کپی شد!');
+                }, function(err) {
+                    console.error('متاسفانه متن کپی نشد: ', err);
+                });
+            });
+
 
             $('#question-form').submit(function(event) {
                 event.preventDefault();
@@ -247,7 +266,9 @@
                             "<span><b>AI:</b></span><br>" +
                             "<div class='box-pre'>" +
                             "<div class='d-flex justify-content-between'>"+
-                            '<i id="btnCopy" class="btn-copy fa fa-copy"></i>'+
+                            "<button class='btn-copy' data-target=" + uniqueId + ">"+
+                            "<i class='fa fa-copy'></i>"+
+                            "</button>"+
                             "<button class='translate-btn btn btn-success' data-target='" + uniqueId + "'>ترجمه فارسی</button>" +
                             "</div>"
                             +
