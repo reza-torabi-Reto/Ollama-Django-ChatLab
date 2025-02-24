@@ -54,7 +54,7 @@
         <div id="modelTrans" class="container box_trans">
             <!-- Close Button -->
             <div class="d-flex justify-content-between">
-                <i id="btnTransCopy" class="btn-trans-copy fa fa-copy"></i>
+                <button id="btnTransCopy" class="btn-trans-copy"><i class="fa fa-copy"></i></button>
                 <i class="fas fa-close text-danger" id="closeModeltrans"></i>
             </div>
             <h4>متن ترجمه شده</h4>
@@ -218,23 +218,37 @@
                 console.error('متاسفانه متن ترجمه کپی نشد: ', err);
             });
 
-            
+           var originalIcon = $(this).find('i').attr('class'); // ذخیره آیکون اصلی
+           $(this).find('i').removeClass().addClass('fa fa-check'); // تغییر به آیکون جدید
+       
+           // بازگرداندن آیکون اصلی بعد از یک ثانیه
+           setTimeout(function() {
+               $(this).find('i').removeClass().addClass(originalIcon); // بازگرداندن آیکون اصلی
+           }.bind(this), 1000); // 1000 میلی‌ثانیه برابر با یک ثانیه
+       
         });
 
 
-            $(document).on('click', '.btn-copy', function() {
-                var targetId = $(this).data('target');
-                var copyElement = $('#' + targetId);
-                // گرفتن متن از تگ مورد نظر
-                var text = copyElement.text();
-
-                // استفاده از Clipboard API برای کپی کردن متن
-                navigator.clipboard.writeText(text).then(function() {
-                    console.log('متن با موفقیت کپی شد!');
-                }, function(err) {
-                    console.error('متاسفانه متن کپی نشد: ', err);
-                });
+        $(document).on('click', '.btn-copy', function() {
+            var targetId = $(this).data('target');
+            var copyElement = $('#' + targetId);
+            // گرفتن متن از تگ مورد نظر
+            var text = copyElement.text();
+            // استفاده از Clipboard API برای کپی کردن متن
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('متن با موفقیت کپی شد!');
+            }, function(err) {
+                console.error('متاسفانه متن کپی نشد: ', err);
             });
+            
+           var originalIcon = $(this).find('i').attr('class'); // ذخیره آیکون اصلی
+           $(this).find('i').removeClass().addClass('fa fa-check'); // تغییر به آیکون جدید
+       
+           // بازگرداندن آیکون اصلی بعد از یک ثانیه
+           setTimeout(function() {
+               $(this).find('i').removeClass().addClass(originalIcon); // بازگرداندن آیکون اصلی
+           }.bind(this), 1000); // 1000 میلی‌ثانیه برابر با یک ثانیه
+        });
 
 
             $('#question-form').submit(function(event) {

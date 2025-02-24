@@ -142,9 +142,6 @@ pre {
     color:#fff;
     text-align: right;
 }
-#modelTrans i{
-    font-size:20px;
-}
 .text_trans{
     width: 100%;
     margin: 10px auto;
@@ -156,14 +153,21 @@ pre {
     font-weight: bold;
     font-size:14px
 }
-.btn-copy{
+.btn-copy, .btn-trans-copy{
     color: #afb7c1;
-    margin: 2px;
+    margin: 0px;
+    border: solid 2px #afb7c1;
+    height: 28px;
+    padding: 0px 3px;
+    border-radius: 3px;
+    background: none;
 }
-.btn-copy i{
-    color: #afb7c1;
-    margin: 2px;
+.btn-copy:hover, .btn-trans-copy:hover{
+    color: #8a9099;
+    border-color:#8a9099;
 }
-.btn-trans-copy{
 
+.btn-copy:active, .btn-trans-copy:visited{
+    color: green;
+    border-color:green;
 }
