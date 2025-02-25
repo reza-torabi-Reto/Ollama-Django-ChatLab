@@ -13,6 +13,11 @@ def get_models_from_json():
     except FileNotFoundError:
         return [('', 'No models found')]
 
+class QuestionForm(forms.Form):
+    model_choices = get_models_from_json()
+    
+    model = forms.ChoiceField(choices=model_choices, label="Select AI Model")
+    question = forms.CharField(label='Your Question', max_length=1000, widget=forms.Textarea)
 
 # def get_models_from_json():
 #     json_file_path = os.path.join(settings.BASE_DIR, 'static', 'data', 'models_ai.json')
@@ -26,9 +31,5 @@ def get_models_from_json():
 #         print("File not found.")
         
 
-class QuestionForm(forms.Form):
-    model_choices = get_models_from_json()
-    
-    model = forms.ChoiceField(choices=model_choices, label="Select AI Model")
-    question = forms.CharField(label='Your Question', max_length=1000, widget=forms.Textarea)
+
     
