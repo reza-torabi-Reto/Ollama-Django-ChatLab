@@ -1,4 +1,5 @@
 [
     "gemma:2b",
-    "llama3.2:1b"
+    "llama3.2:1b",
+    "deepseek-r1:1.5b"
 ]
