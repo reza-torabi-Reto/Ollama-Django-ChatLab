@@ -51,6 +51,39 @@ pre {
     overflow-x: auto;
     white-space: pre-wrap; 
 }
+
+think {
+    display: inline-block;
+    background: #fff3cd;
+    color: #856404;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #ffeeba;
+    margin: 0 2px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+.think-tag {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+.translation-progress {
+    margin: 15px 0;
+}
+
+.progress-text {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
 .box_form {
     position: fixed;
     bottom: 0;

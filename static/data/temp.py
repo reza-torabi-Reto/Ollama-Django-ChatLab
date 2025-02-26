@@ -259,3 +259,84 @@
 #         });
         
 #     </script>
+
+# btn send form
+# var show_data = data.answer
+#                     .replace(/<think>/g, '<think class="think-tag">') // اضافه کردن کلاس برای استایل
+#                     .replace(/<\/think>/g, '</think>')
+#                     .replace(/### (.*)/g, '<h3>$1</h3>')
+#                     .replace(/## (.*)/g, '<h2>$1</h2>')
+#                     .replace(/# (.*)/g, '<h1>$1</h1>')
+#                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+#                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
+#                     .replace(/`(.*?)`/g, '<code>$1</code>')
+#                     .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+                    
+
+# # view
+# from bs4 import BeautifulSoup
+# from googletrans import Translator
+
+# def translate_view(request):
+#     if request.method == 'POST':
+#         text = request.POST.get('text')
+#         try:
+#             # استفاده از html.parser برای پردازش بهتر تگها
+#             soup = BeautifulSoup(text, 'html.parser')
+            
+#             # استخراج و جایگزینی تگهای think
+#             think_tags = {}
+#             for i, tag in enumerate(soup.find_all('think')):
+#                 original_content = str(tag)  # ذخیره کل تگ با محتوا
+#                 placeholder = f'[[THINK_TAG_{i}]]'
+#                 think_tags[placeholder] = original_content
+#                 tag.replace_with(placeholder)
+            
+#             # تبدیل به متن تمیز برای ترجمه
+#             clean_text = str(soup)
+            
+#             # انجام ترجمه
+#             translator = Translator()
+#             translated = translator.translate(clean_text, dest='fa').text
+            
+#             # جایگزینی معکوس با تگهای اصلی
+#             for placeholder, original in think_tags.items():
+#                 translated = translated.replace(placeholder, original)
+            
+#             return JsonResponse({'translation': translated})
+        
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+#     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# # css
+# think {
+#     display: inline-block;
+#     background: #fff3cd;
+#     color: #856404;
+#     padding: 2px 5px;
+#     border-radius: 3px;
+#     border: 1px solid #ffeeba;
+#     margin: 0 2px;
+#     font-family: monospace;
+#     font-size: 0.9em;
+# }
+# .think-tag {
+#     background-color: #fff3cd;
+#     border: 1px solid #ffeeba;
+#     color: #856404;
+#     padding: 2px 5px;
+#     border-radius: 3px;
+#     font-family: 'Courier New', Courier, monospace;
+#     font-size: 0.9em;
+# }
+
+# .text_trans {
+#     white-space: pre-wrap;
+#     word-break: break-word;
+#     background: #f8f9fa;
+#     padding: 15px;
+#     border-radius: 5px;
+# }
+

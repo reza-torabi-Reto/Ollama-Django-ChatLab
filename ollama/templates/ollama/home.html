@@ -171,38 +171,68 @@
             });
         }
 
+
+
         // ** Translation **
+        // تابع جدید برای مدیریت ترجمه متنهای طولانی
+        async function handleLongTextTranslation(text) {
+            const CHUNK_SIZE = 4000; // اندازه کوچکتر برای اطمینان
+            const chunks = [];
+            // تقسیم متن به صورت هوشمند
+            while (text.length > 0) {
+                let chunk = text.substr(0, CHUNK_SIZE);
+                const lastSpace = chunk.lastIndexOf(' ');
+
+                if (lastSpace > 0 && text.length > CHUNK_SIZE) {
+                    chunk = chunk.substr(0, lastSpace);
+                    text = text.substr(lastSpace).trim();
+                } else {
+                    text = text.substr(CHUNK_SIZE).trim();
+                }
+
+                chunks.push(chunk);
+            }
+            // ترجمه تمامی قطعات
+            const translatedChunks = [];
+            for (const chunk of chunks) {
+                try {
+                    const response = await $.ajax({
+                        url: '/translate/',
+                        type: 'POST',
+                        data: {
+                            'text': chunk,
+                            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                        },
+                        timeout: 15000
+                    });
+
+                    translatedChunks.push(response.translation);
+                } catch (error) {
+                    console.error('Error translating chunk:', error);
+                    translatedChunks.push(`[TRANSLATION ERROR IN CHUNK]`);
+                }
+            }
+            return translatedChunks.join('');
+        }
         // Click event for translate button
-        $(document).on('click', '.translate-btn', function() {
-            var targetId = $(this).data('target');
-            var preElement = $('#' + targetId);
-            var textToTranslate = preElement.text();
-            var transElement = $("#textTrans");
-            var button = $(this);
+        $(document).on('click', '.translate-btn', async function() {
+            const button = $(this);
             button.prop('disabled', true);
 
-            $.ajax({
-                url: '/translate/', // Translation endpoint address
-                type: 'POST',
-                data: {
-                    'text': textToTranslate,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                },
-                dataType: 'json',
-                success: function(data) {
-                    transElement.html(data.translation); // Replace text with translation
-                    transElement.css('direction', 'rtl'); // Right-align the text
-                },
-                error: function(xhr, status, error) {
-                    console.error("Translation failed", status, error);
-                    alert('Failed to translate.');
-                    button.text('Translate');
-                },
-                complete: function() {
-                    button.prop('disabled', false);
-                }
-            });
-            $('#modelTranslateContainer').show();
+            const targetId = button.data('target');
+            const preElement = $(`#${targetId}`);
+            const originalText = preElement.text();
+
+            try {
+                const translatedText = await handleLongTextTranslation(originalText);
+                $('#textTrans').html(translatedText).css('direction', 'rtl');
+                $('#modelTranslateContainer').show();
+            } catch (error) {
+                console.error('Translation failed:', error);
+                alert('خطا در ترجمه متن طولانی');
+            } finally {
+                button.prop('disabled', false);
+            }
         });
 
         // ** Copy **
@@ -260,6 +290,15 @@
                 },
                 dataType: 'json',
                 success: function(data) {
+                    var show_data = data.answer
+                    .replace(/### (.*)/g, '<h3>$1</h3>')
+                    .replace(/## (.*)/g, '<h2>$1</h2>')
+                    .replace(/# (.*)/g, '<h1>$1</h1>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/`(.*?)`/g, '<code>$1</code>')
+                    .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+
                     var uniqueId = 'ai-answer-' + Date.now();
                     var resultItem = "<div class='mb-3'>" +
                         "<span><b>Model:</b> </span>" + data.model +
@@ -273,7 +312,7 @@
                         "</button>" +
                         "<button class='translate-btn btn btn-success' data-target='" + uniqueId + "'>ترجمه فارسی</button>" +
                         "</div>" +
-                        "<pre id='" + uniqueId + "'>" + data.answer + "</pre>" +
+                        "<pre id='" + uniqueId + "'>" + show_data + "</pre>" +
                         "</div>" +
                         "<hr></div>";
                     $("#boxAnswer").append(resultItem);

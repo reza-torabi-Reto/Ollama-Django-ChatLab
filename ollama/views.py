@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-import json
-import os
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from .forms import QuestionForm
+from googletrans import Translator
+import json
+import os
+import math
 from .MyAI import gernerate_ai
-from googletrans import Translator  # یا هر کتابخانه ترجمه دیگری
+from .forms import QuestionForm
+
+
 
 
 def get_models_from_json():
@@ -24,19 +27,69 @@ def write_models_to_json(models):
     with open(json_file_path, 'w') as f:
         json.dump(models, f, indent=4)
 
+def split_text_into_chunks(text, max_size):
+    """
+    متن را به صورت هوشمندانه تقسیم میکند بدون قطع کردن کلمات و تگها
+    """
+    chunks = []
+    while text:
+        if len(text) <= max_size:
+            chunks.append(text)
+            break
+        
+        # پیدا کردن آخرین فضای خالی قبل از حد مجاز
+        split_at = text.rfind(' ', 0, max_size)
+        split_at = split_at if split_at != -1 else max_size
+        
+        chunks.append(text[:split_at])
+        text = text[split_at:].lstrip()
+    
+    return chunks
 
 # @csrf_exempt
+# def translate_view(request):
+#     if request.method == 'POST':
+#         text = request.POST.get('text')
+#         print(f"text== {text}")
+#         try:
+#             print("-----------")
+#             translator = Translator()
+#             translation = translator.translate(text, dest='fa').text
+#             print(f"text-trans= {translator}")
+#             return JsonResponse({'translation': translation})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+#     else:
+#         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
 def translate_view(request):
     if request.method == 'POST':
-        text = request.POST.get('text')
+        text = request.POST.get('text', '')
+        
         try:
+            # تنظیمات تقسیم متن
+            MAX_CHUNK_SIZE = 4500  # کمتر از محدودیت 5000 کاراکتری گوگل
+            chunks = split_text_into_chunks(text, MAX_CHUNK_SIZE)
+            
             translator = Translator()
-            translation = translator.translate(text, dest='fa').text
-            return JsonResponse({'translation': translation})
+            translated_chunks = []
+            
+            for chunk in chunks:
+                translated = translator.translate(chunk, dest='fa').text
+                translated_chunks.append(translated)
+            
+            full_translation = ''.join(translated_chunks)
+            
+            return JsonResponse({
+                'translation': full_translation,
+                'chunks': len(chunks)
+            })
+            
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-    else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def ollama_view(request):
