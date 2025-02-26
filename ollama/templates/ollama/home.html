@@ -62,8 +62,7 @@
             </pre>
         </div>
     </div>
-
-
+    
     <!-- Model Management Container -->
     <div id="modelManagementContainer">
         <div id="modelManagement">
@@ -176,26 +175,27 @@
         // ** Translation **
         // تابع جدید برای مدیریت ترجمه متنهای طولانی
         async function handleLongTextTranslation(text) {
-            const CHUNK_SIZE = 4000; // اندازه کوچکتر برای اطمینان
+            const CHUNK_SIZE = 4000;
             const chunks = [];
-            // تقسیم متن به صورت هوشمند
-            while (text.length > 0) {
-                let chunk = text.substr(0, CHUNK_SIZE);
-                const lastSpace = chunk.lastIndexOf(' ');
+            let currentChunk = '';
 
-                if (lastSpace > 0 && text.length > CHUNK_SIZE) {
-                    chunk = chunk.substr(0, lastSpace);
-                    text = text.substr(lastSpace).trim();
-                } else {
-                    text = text.substr(CHUNK_SIZE).trim();
+            // تقسیم متن به صورت هوشمند با حفظ کلمات
+            text.split(' ').forEach(word => {
+                if ((currentChunk + word).length > CHUNK_SIZE) {
+                    chunks.push(currentChunk.trim());
+                    currentChunk = '';
                 }
+                currentChunk += word + ' ';
+            });
 
-                chunks.push(chunk);
+            if (currentChunk.trim().length > 0) {
+                chunks.push(currentChunk.trim());
             }
-            // ترجمه تمامی قطعات
+
             const translatedChunks = [];
-            for (const chunk of chunks) {
-                try {
+
+            try {
+                for (const chunk of chunks) {
                     const response = await $.ajax({
                         url: '/translate/',
                         type: 'POST',
@@ -203,17 +203,25 @@
                             'text': chunk,
                             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
                         },
-                        timeout: 15000
+                        timeout: 20000
                     });
 
+                    if (response.error) throw new Error(response.error);
                     translatedChunks.push(response.translation);
-                } catch (error) {
-                    console.error('Error translating chunk:', error);
-                    translatedChunks.push(`[TRANSLATION ERROR IN CHUNK]`);
                 }
+
+                return translatedChunks.join(' ');
+
+            } catch (error) {
+                console.error('Translation error:', error);
+                const partialResult = translatedChunks.join(' ');
+                return `${partialResult}<div class="alert alert-danger mt-3">
+                    خطا در ترجمه: ${error.message || 'مشکل در ارتباط با سرور'}
+                </div>`;
             }
-            return translatedChunks.join('');
         }
+
+        
         // Click event for translate button
         $(document).on('click', '.translate-btn', async function() {
             const button = $(this);
@@ -229,7 +237,7 @@
                 $('#modelTranslateContainer').show();
             } catch (error) {
                 console.error('Translation failed:', error);
-                alert('خطا در ترجمه متن طولانی');
+                alert('خطا در ترجمه: ' + (error.message || 'خطای ناشناخته'));
             } finally {
                 button.prop('disabled', false);
             }

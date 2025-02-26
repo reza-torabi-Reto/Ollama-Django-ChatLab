@@ -72,16 +72,14 @@ think {
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.9em;
 }
-.translation-progress {
-    margin: 15px 0;
-}
 
-.progress-text {
-    display: block;
-    text-align: center;
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: #666;
+.alert-danger {
+    background: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .box_form {
