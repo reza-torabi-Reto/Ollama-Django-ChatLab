@@ -2,10 +2,10 @@
 
 A Django-based web interface for interacting with LLMs through local Ollama API
 
-![Screenshot](./static/screenshots/preview1.png) <!-- Replace with actual screenshot -->
+![Screenshot](./static/screenshots/preview01.png) <!-- Replace with actual screenshot -->
 
 
-![Screenshot](./static/screenshots/perview2.png) <!-- Replace with actual screenshot -->
+![Screenshot](./static/screenshots/perview02.png) <!-- Replace with actual screenshot -->
 
 ## Key Features ✨
 - 💬 Multi-model support (Llama3, Deepseek, Gemma, etc.)
