@@ -2,8 +2,6 @@ button, i {
     cursor: pointer;
 }
 body {
-    /* font-family: Arial, sans-serif; */
-    /* background-color: #f8f9fa; */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -17,7 +15,6 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    /* margin-top: 8px; */
     max-width: 1200px;
     padding: 1rem;
     margin: 0 auto;
@@ -25,12 +22,8 @@ body {
 .box_answer {
     flex: 1;
     overflow-y: auto;
-    /* padding: 5px 25px; */
-    /* background-color: #fff; */
-    /* border-radius: 5px; */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-height: 56vh;
-    /* transition: max-height 0.3s ease; */
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -65,7 +58,6 @@ body {
 .form-control {
     border: 2px solid #cbd5e0;
     border-radius: 8px;
-    /* padding: 0.75rem 1rem; */
     transition: border-color 0.2sease;
 }
 ._label {
@@ -77,9 +69,6 @@ body {
 }
 .box-pre{
     position: relative;
-    /* background: #f0f0f0; */
-    /* padding: 5px; */
-    /* border-radius: 4px; */
     background: #ffffff;
     border-radius: 8px;
     padding: 1rem;
@@ -149,9 +138,6 @@ think {
 /* Style for the model management section */
 #modelManagement {
     margin-top: 20px;
-    /* padding: 15px; */
-    /* background-color: #e9ecef; */
-    /* border-radius: 5px; */
     background: #ffffff;
     border-radius: 12px;
     padding: 2rem;
@@ -169,13 +155,6 @@ think {
     margin-bottom: 10px;
 }
 .nameModel {
-    /* display: inline-block; */
-    /* border: 1px solid #ced4da; */
-    /* border-radius: 3px; */
-    /* background-color: #fff; */
-    /* padding: 2px 5px; */
-    /* margin-bottom: 4px; */
-    /* margin-right: 6px; */
     background: #edf2f7;
     border-radius: 6px;
     padding: 0.5rem 1rem;
@@ -184,12 +163,7 @@ think {
     align-items: center;
     gap: 0.5rem;
 }
-/* #modelList span .deleteModel {
-        color: red;
-        cursor: pointer;
-        border: none;
-        margin-left: 5px;
-} */
+
 .deleteModel {
     color: #e53e3e !important;
     transition: color 0.2sease;
@@ -227,14 +201,12 @@ think {
 #modelTranslateContainer{
 }
 #modelTrans{
-    /* height:98%; */
-    /* padding:15px; */
-    /* background-color: #292626; */
     background: #2d3748;
     border-radius: 12px;
     padding: 2rem;
     width: 90%;
-    max-width: 800px;
+    max-width: 1200px;
+    margin-top: 5px;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -246,10 +218,7 @@ think {
 }
 .text_trans{
     width: 100%;
-    /* margin: 10px auto; */
     min-height: 500px;
-    /* background-color: #fff; */
-    /* border-radius: 4px; */
     padding: 8px 12px;
     text-align: justify;
     font-weight: bold;
@@ -292,16 +261,13 @@ think {
 }
 
 /* Hover Effects */
-/* .btn-copy:hover, .btn-trans-copy:hover{
-    color: #8a9099;
-    border-color:#8a9099;
-} */
 .btn-copy:hover, .btn-trans-copy:hover {
     transform: scale(1.05);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-copy:active, .btn-trans-copy:visited{
+.fa-check{
     color: green;
     border-color:green;
+    font-weight: bold;
 }
